@@ -1,26 +1,25 @@
 class Solution {
 public:
-    int robLinear(vector<int>& nums, int start, int end) {
-        int n = end - start + 1;
-        // agar sirf ek house hai
-        if (n == 1) return nums[start];
+    int solve(vector<int>& nums, int l, int r) {
+        int prev1 = 0, prev2 = 0;
 
-        vector<int> dp(n);
-        dp[0] = nums[start];
-        dp[1] = max(nums[start], nums[start + 1]);
-        for (int i = 2; i < n; i++) {
-            dp[i] = max(dp[i - 1], nums[start + i] + dp[i - 2]);
+        for (int i = l; i <= r; i++) {
+            int curr = max(prev1, nums[i] + prev2);
+            prev2 = prev1;
+            prev1 = curr;
         }
 
-        return dp[n - 1];
+        return prev1;
     }
+
     int rob(vector<int>& nums) {
         int n = nums.size();
-        if (n == 1) return nums[0];
-        // Case 1: first include kar sakte ho, so last exclude
-        int case1 = robLinear(nums, 0, n - 2);
-        // Case 2: last include kar sakte ho, so first exclude
-        int case2 = robLinear(nums, 1, n - 1);
-        return max(case1, case2);
+
+        if (n == 1)
+            return nums[0];
+
+        return max(solve(nums, 0, n - 2), // skip last
+                   solve(nums, 1, n - 1)  // skip first
+        );
     }
 };
