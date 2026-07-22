@@ -23,18 +23,21 @@ public:
         int low = *max_element(weights.begin(), weights.end());
         int high = accumulate(weights.begin(), weights.end(), 0);
 
-        while(low < high){
+        int ans = high;
+
+        while(low <= high){
 
             int mid = low + (high - low) / 2;
 
             if(fun(weights, days, mid)){
-                high = mid;
+                ans = mid;
+                high = mid - 1;
             }
             else{
                 low = mid + 1;
             }
         }
 
-        return low;
+        return ans;
     }
 };
